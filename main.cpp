@@ -9,9 +9,9 @@
 #include <wow/ui.hpp>
 #include <wow/state.hpp>
 #include <wow/build.hpp>
-#include <objects/object_manager.hpp>
-#include <objects/all.hpp>
-#include <objects/display_ids.hpp>
+#include <wow/offsets.hpp>
+#include <wow/objects/all.hpp>
+#include <wow/objects/display_ids.hpp>
 
 #include <boost/sml.hpp>
 #include <boost/iterator/filter_iterator.hpp>
@@ -36,7 +36,7 @@ distant::process<> get_wow_choice()
 
 		std::cout << "WoW Process ids:\n";
 		for (const auto& process : proc_list)
-			std::cout << "(" << process.id() << ", " << distant::memory::read<std::string>(process, wow::offsets::local_player::name, 17) << ")\n";
+			std::cout << "(" << process.id() << ", " << distant::memory::read<std::string>(process, wow::offsets::local_player::name, 16) << ")\n";
 		std::cout << std::endl;
 
 		const auto find_pid = [&proc_list](const auto pid)
@@ -82,19 +82,29 @@ distant::process<> get_wow_choice()
 
 struct fishing_bobber_predicate
 {
-	bool operator()(const objects::game_object& obj) const
+	bool operator()(const wow::game_object& obj) const
 	{
 		return obj.name() == "Fishing Bobber";
 	}
 };
 
+template <typename T>
+void test_f(memory::offset<T> offset)
+{
+
+}
+
 int main()
 {
+	auto t = memory::offset<int>(0);
+
+	test_f(t);
+
 	std::cout << std::boolalpha;
 
 	while (true)
 	{
-		wow::set_process(get_wow_choice());
+		wow::attach_process(get_wow_choice());
 		if (!wow::process().is_active())
 		{
 			std::cout << "Process not running.\n";
@@ -109,17 +119,19 @@ int main()
 
 		try
 		{
-			const auto& local_player = objects::local_player();
-			std::cout << objects::make_dump(local_player);
+			auto version = memory::read_offset(wow::offsets::build_info::version_name);
 
-			objects::object_manager<objects::game_object>{}
-				.for_each([&local_player](objects::game_object& obj)
+			const auto& local_player = wow::local_player();
+			std::cout << wow::make_object_dump(local_player);
+
+			wow::object_manager<wow::game_object>{}
+				.for_each([](wow::game_object& obj)
 			{
-				std::cout << objects::make_dump(obj);
-				obj.change_owner(local_player);
-				obj.set_flags(0);
+				std::cout << wow::make_object_dump(obj);
+				//obj.change_owner(local_player);
+				//obj.set_flags(0);
 
-				std::cout << "Now owned by " << obj.owner()->get().name() << "\n\n";
+				//std::cout << "Now owned by " << obj.owner()->get().name() << "\n\n";
 			}, fishing_bobber_predicate{});
 			
 			/*
@@ -139,7 +151,7 @@ int main()
 
 			//wow::ui::interact(objects::local_player());
 			
-			std::cout << "Cache size: " << objects::object_manager<objects::unit>().size() << '\n';
+			std::cout << "Cache size: " << wow::object_manager<wow::unit>().size() << '\n';
 		}
 		catch (error::game_error& e) // Game issue: process crashed, not ingame, etc
 		{

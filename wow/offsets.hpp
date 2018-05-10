@@ -1,15 +1,17 @@
 #pragma once
 
 #include <memory/address.hpp>
-#include <wow/primitives.hpp>
-#include <objects/types.hpp>
 #include <geometry/vector.hpp>
+
+#include "primitives.hpp"
+#include "objects/types.hpp"
+
+#include <string>
 
 /// @brief WoW version 3.3.5a 12340 addresses and offsets.
 namespace wow::offsets
 {
 	struct pointer;
-	struct string;
 
 	template <typename...>
 	struct function;
@@ -18,7 +20,7 @@ namespace wow::offsets
 
 	namespace build_info
 	{
-		constexpr auto version_name	 = memory::offset<string>(0x00CABBB8);
+		constexpr auto version_name	 = memory::offset<std::string>(0x00CABBB8);
 		constexpr auto major_version = memory::offset<wow::uint>(0x009F5208);
 		constexpr auto minor_version = memory::offset<wow::uint>(0x009F5200);
 	}
@@ -27,8 +29,8 @@ namespace wow::offsets
 	{
 		constexpr auto queue_position	   = memory::offset<wow::uint>(0x00B6A9BC);
 		constexpr auto login_screen_status = memory::offset<wow::dword>(0xD41660);
-		constexpr auto account_name		   = memory::offset<string>(0x00B6AA40);
-		constexpr auto realm_name		   = memory::offset<string>(0x00C79B9E);
+		constexpr auto account_name		   = memory::offset<std::string>(0x00B6AA40);
+		constexpr auto realm_name		   = memory::offset<std::string>(0x00C79B9E);
 	}
 
 	namespace ui
@@ -53,7 +55,7 @@ namespace wow::offsets
 	namespace map
 	{
 		constexpr auto zone_id  = memory::offset<wow::uint>(0x00BD080C);
-		constexpr auto map_name = memory::offset<string>(0xCE06D0);
+		constexpr auto map_name = memory::offset<std::string>(0xCE06D0);
 	}
 
 	namespace dbc
@@ -68,7 +70,7 @@ namespace wow::offsets
 		constexpr auto base		 = memory::offset<memory::address>(0xCD87A8);
 		constexpr auto base_ptr1 = memory::offset<memory::address**>(0x34);
 		constexpr auto base_ptr2 = memory::offset<memory::address*>(0x24);
-		constexpr auto name		 = memory::offset<string>(0xC79D18);
+		constexpr auto name		 = memory::offset<std::string>(0xC79D18);
 	}
 	
 	namespace object_manager
@@ -82,7 +84,7 @@ namespace wow::offsets
 
 	namespace object
 	{
-		constexpr auto vtable = memory::offset<function<void>**>(0);
+		constexpr auto vtable = memory::offset<std::vector<function<void>>>(0);
 		constexpr auto scale  = memory::offset<float>(0x10); // ?? check
 
 		constexpr auto type   = memory::offset<objects::object_type>(0x14);
@@ -92,8 +94,8 @@ namespace wow::offsets
 		// what type?
 		constexpr auto model = memory::offset<wow::uint>(0xB4);
 
-		constexpr auto object_descriptors = memory::offset<pointer>(0x08);
-		constexpr auto player_descriptors = memory::offset<pointer>(0x1198);
+		constexpr auto object_descriptors = memory::offset<memory::address>(0x08);
+		constexpr auto player_descriptors = memory::offset<memory::address>(0x1198);
 
 		constexpr auto go_x_coord = memory::offset<float>(0xE8);
 		constexpr auto go_y_coord = memory::offset<float>(0xEC);
@@ -124,10 +126,10 @@ namespace wow::offsets
 	namespace party
 	{
 		constexpr auto member1_guid = memory::offset<wow::guid>(0x00BD1948);
-		constexpr auto member2_guid = memory::offset<wow::guid>(member1_guid + sizeof(wow::guid));
-		constexpr auto member3_guid = memory::offset<wow::guid>(member2_guid + sizeof(wow::guid));
-		constexpr auto member4_guid = memory::offset<wow::guid>(member3_guid + sizeof(wow::guid));
-		constexpr auto member5_guid = memory::offset<wow::guid>(member4_guid + sizeof(wow::guid));
+		constexpr auto member2_guid = memory::offset<wow::guid>(member1_guid + memory::address(sizeof(wow::guid)));
+		constexpr auto member3_guid = memory::offset<wow::guid>(member2_guid + memory::address(sizeof(wow::guid)));
+		constexpr auto member4_guid = memory::offset<wow::guid>(member3_guid + memory::address(sizeof(wow::guid)));
+		constexpr auto member5_guid = memory::offset<wow::guid>(member4_guid + memory::address(sizeof(wow::guid)));
 		constexpr auto leader_guid  = memory::offset<wow::guid>(0x00BD1968);
 	}
 
@@ -164,6 +166,8 @@ namespace wow::offsets
 
 		constexpr auto flags  = memory::offset<wow::flags>(0xEC);
 		constexpr auto flags2 = memory::offset<wow::flags>(0xF0);
+		constexpr auto display_id = memory::offset<wow::uint>(0x10C);
+
 		//constexpr auto channelled_object = memory::offset<wow::guid>(0x50);
 		//constexpr auto channelled_object = memory::offset<wow::guid>(0x50);
 
@@ -176,7 +180,7 @@ namespace wow::offsets
 		// 8 bytes padding
 		constexpr auto movement_speed_flying	= memory::offset<float>(0x82C);
 
-		constexpr auto movement_state = memory::offset<byte[4]>(0x7CC);
+		constexpr auto movement_state = memory::offset<std::array<byte, 4>>(0x7CC);
 		// (0 0 0 3) flying
 		// (0 0 0 128) default - stop fall
 		// (1 0 0 128) run forward
@@ -210,16 +214,25 @@ namespace wow::offsets
 
 	namespace name_cache 
 	{
-		constexpr auto unit_name_ptr_offset1 = memory::offset<string**>(0x964);
-		constexpr auto unit_name_ptr_offset2 = memory::offset<string*>(0x5C);
+		constexpr auto unit_name_ptr_offset1 = memory::offset<std::string**>(0x964);
+		constexpr auto unit_name_ptr_offset2 = memory::offset<std::string*>(0x5C);
 
 		constexpr auto cache_base		  = memory::offset<memory::address>(0xC5D940);
 		constexpr auto player_name_mask   = memory::offset<wow::flags>(0x24);
 		constexpr auto player_name_base   = memory::offset<pointer>(0x1C);
-		constexpr auto player_name_string = memory::offset<string>(0x20);
+		constexpr auto player_name_string = memory::offset<std::string>(0x20);
 
-		constexpr auto go_name_ptr_offset1 = memory::offset<string**>(0x1A4);
-		constexpr auto go_name_ptr_offset2 = memory::offset<string*>(0x90);
+		constexpr auto go_name_ptr_offset1 = 
+			memory::offset<
+				memory::offset<
+					memory::offset<std::string>
+				>
+			> (0x1A4);
+
+		constexpr auto go_name_ptr_offset2 = 
+			memory::offset<
+				memory::offset<std::string>
+			> (0x90);
 	}
 
 	namespace guild
@@ -235,4 +248,5 @@ namespace wow::offsets
 	{
 		constexpr auto console_key = memory::offset<wow::byte>(0x00ADBAC4);
 	}
-}
+
+} // namespace wow::offsets

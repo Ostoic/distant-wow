@@ -27,11 +27,13 @@ namespace geometry
 		return stream;
 	}
 
+#pragma warning(push)
+#pragma warning(disable:4996)
 	inline float distance(const vector& v1, const vector& v2) noexcept
 	{
 		const vector diff = v1 - v2;
 		return std::sqrt(std::inner_product(diff.begin(), diff.end(), diff.begin(), float{}));
 	}
-
+#pragma warning(pop)
 
 }

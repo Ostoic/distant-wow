@@ -6,5 +6,5 @@ namespace wow
 {
 	distant::process<>& process();
 
-	void set_process(distant::process<>&& process);
+	void attach_process(distant::process<>&& process);
 }

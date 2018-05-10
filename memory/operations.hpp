@@ -5,10 +5,7 @@
 namespace memory
 {
 	template <typename T>
-	T read(address);
-
-	template <typename T>
-	T read(address, std::size_t);
+	T read(address, std::size_t = sizeof(T));
 
 	template <typename T>
 	T read_offset(offset<T> offset);
@@ -18,9 +15,6 @@ namespace memory
 
 	template <typename T>
 	void write(address, const T&);
-
-	template <typename T>
-	void write(address, T&);
 }
 
 // Implementation:

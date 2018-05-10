@@ -2,15 +2,15 @@
 
 #include "offsets.hpp"
 #include "../memory/operations.hpp"
-#include "../objects/object_manager.hpp"
+#include "objects/object_manager.hpp"
 
 namespace wow::party
 {
-	optional_object<objects::player> leader()
+	optional_ref<player> leader()
 	{
 		const auto guid = memory::read<wow::guid>(wow::offsets::party::member1_guid);
 
-		objects::object_manager<objects::player> manager;
+		object_manager<objects::player> manager;
 		const auto it = manager.find(guid);
 		if (it != manager.end())
 			return *it;
@@ -18,7 +18,7 @@ namespace wow::party
 		return {};
 	}
 
-	optional_object<objects::player> member(const uint index)
+	optional_ref<player> member(const uint index)
 	{
 		wow::guid guid;
 
@@ -49,7 +49,7 @@ namespace wow::party
 			return {};
 		}
 
-		objects::object_manager<objects::player> manager;
+		object_manager<player> manager;
 		const auto it = manager.find(guid);
 		if (it != manager.end())
 			return *it;

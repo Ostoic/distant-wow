@@ -11,10 +11,10 @@ namespace wow
 		return wow_process;
 	}
 
-	void set_process(distant::process<>&& process)
+	void attach_process(distant::process<>&& process)
 	{
 		//if (is_process_supported(process))
-			//throw error::memory_disparity("[wow::set_process] WoW version not supported");
+			//throw error::memory_disparity("[wow::attach_process] WoW version not supported");
 
 		wow::process() = std::move(process);
 	}

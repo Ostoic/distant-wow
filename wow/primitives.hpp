@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <variant>
+#include <optional>
 
 namespace wow
 {
@@ -11,6 +12,9 @@ namespace wow
 	using flags = dword;
 	using uint = unsigned int;
 	using byte = char;
+
+	template <typename T>
+	using optional_ref = std::optional<std::reference_wrapper<T>>;
 
 	struct guid
 	{
