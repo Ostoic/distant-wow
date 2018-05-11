@@ -53,7 +53,7 @@ namespace wow::objects
 
 	void game_object::change_name(const std::string& name)
 	{
-		memory::write(detail::get_name_ptr<game_object>(this->base_), this->name_);
+		memory::write(detail::get_name_ptr<game_object>(base_), name_);
 		this->name_ = name;
 	}
 
@@ -69,7 +69,7 @@ namespace wow::objects
 
 	geometry::vector game_object::get_position() const
 	{
-		return memory::read<geometry::vector>(this->base_ + wow::offsets::object::go_x_coord);
+		return memory::read_offset(base_, offsets::object::go_position);
 	}
 
 }

@@ -97,10 +97,12 @@ namespace wow::offsets
 		constexpr auto object_descriptors = memory::offset<memory::address>(0x08);
 		constexpr auto player_descriptors = memory::offset<memory::address>(0x1198);
 
+		constexpr auto go_position = memory::offset<geometry::vector>(0xE8);
 		constexpr auto go_x_coord = memory::offset<float>(0xE8);
 		constexpr auto go_y_coord = memory::offset<float>(0xEC);
 		constexpr auto go_z_coord = memory::offset<float>(0xF0);
 
+		constexpr auto position = memory::offset<geometry::vector>(0x798);
 		constexpr auto x_coord  = memory::offset<float>(0x798);
 		constexpr auto y_coord  = memory::offset<float>(0x79C);
 		constexpr auto z_coord  = memory::offset<float>(0x7A0);

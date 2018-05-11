@@ -9,8 +9,36 @@
 #include <wow/primitives.hpp>
 #include <wow/process.hpp>
 
+#include <geometry/vector.hpp>
+
 #include <distant/memory/virtual_memory.hpp>
 
+namespace distant::memory::customize
+{
+	/// @brief memory::read geometry::vector customization point.
+	template <>
+	struct read<geometry::vector>
+	{
+		template <typename AddressT>
+		static geometry::vector invoke(const process<vm_read>& process, const address<AddressT> address, const std::size_t size)
+		{
+			geometry::vector vector = {};
+			SIZE_T bytes_read = 0;
+
+			/// Todo: Read until null terminator or threshold
+			if (!::ReadProcessMemory(
+				process.handle().native_handle(),
+				reinterpret_cast<boost::winapi::LPCVOID_>(static_cast<AddressT>(address)),
+				vector.data(),
+				size,
+				&bytes_read
+			))
+				throw windows_error("[memory::read<geometry::vecto>] ReadProcessMemory failed, " + std::to_string(bytes_read) + " bytes read");
+
+			return vector;
+		}
+	};
+}
 namespace memory
 {
 	template <typename T>

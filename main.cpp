@@ -88,18 +88,8 @@ struct fishing_bobber_predicate
 	}
 };
 
-template <typename T>
-void test_f(memory::offset<T> offset)
-{
-
-}
-
 int main()
 {
-	auto t = memory::offset<int>(0);
-
-	test_f(t);
-
 	std::cout << std::boolalpha;
 
 	while (true)

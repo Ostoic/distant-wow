@@ -87,7 +87,7 @@ namespace wow::objects
 	geometry::vector object::get_position() const
 	{
 		// Read position vector from memory.
-		return memory::read<geometry::vector>(this->base_ + wow::offsets::object::x_coord);
+		return memory::read_offset(this->base_, wow::offsets::object::position);
 	}
 
 //free:

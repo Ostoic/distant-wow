@@ -71,10 +71,8 @@ namespace wow::objects
 
 	protected: // data
 		memory::address base_;
-		wow::guid guid_;
-		std::string name_;
-
-		mutable std::chrono::time_point<std::chrono::high_resolution_clock> last_update_;
+		wow::guid		guid_;
+		std::string		name_;
 	};
 
 	bool is_valid(const object& obj);

@@ -5,35 +5,41 @@
 
 namespace geometry
 {
-	constexpr vector::vector(const float a, const float b, const float c, const float r) noexcept
-		: x(a), y(b), z(c), bytes(), rot(r) 
+
+//class vector
+	constexpr vector::vector(const float x, const float y, const float z, const float rotation) noexcept
+		: std::array<float, 5>({ x, y, z, 0, rotation })
 	{}
 
-	constexpr float* vector::begin()
-	{ return &x; }
+//access
+	constexpr float vector::x() const noexcept
+	{ return this->operator[](0); }
 
-	constexpr float* vector::end() 
-	{ return this->begin() + 3; }
+	inline float& vector::x() noexcept
+	{ return this->operator[](0); }
 
-	constexpr const float* vector::begin() const
-	{ return &x; }
+	constexpr float  vector::y() const noexcept
+	{ return this->operator[](1); }
 
-	constexpr const float* vector::end() const
-	{ return this->begin() + 3; }
+	inline float& vector::y() noexcept
+	{ return this->operator[](1); }
 
+	constexpr float vector::z() const noexcept
+	{ return this->operator[](2); }
+
+	inline float& vector::z() noexcept
+	{ return this->operator[](2); }
+
+	constexpr float vector::rotation() const noexcept
+	{ return this->operator[](4); }
+
+	inline float& vector::rotation() noexcept
+	{ return this->operator[](4); }
+
+//free:
 	inline std::ostream& operator<<(std::ostream& stream, const vector& rhs)
 	{
-		stream << "(" << rhs.x << ", " << rhs.y << ", " << rhs.z << ") " << rhs.rot;
+		stream << "(" << rhs.x() << ", " << rhs.y() << ", " << rhs.z() << ") " << rhs.rotation();
 		return stream;
 	}
-
-#pragma warning(push)
-#pragma warning(disable:4996)
-	inline float distance(const vector& v1, const vector& v2) noexcept
-	{
-		const vector diff = v1 - v2;
-		return std::sqrt(std::inner_product(diff.begin(), diff.end(), diff.begin(), float{}));
-	}
-#pragma warning(pop)
-
 }

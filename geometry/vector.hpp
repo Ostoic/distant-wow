@@ -1,38 +1,37 @@
 #pragma once
 
 #include <iostream>
+#include <array>
 
 namespace geometry
 {
-	// Pod vector data type
-	struct vector
+	/// @brief position vector representing a location and rotation ingame.
+	struct vector : std::array<float, 5>
 	{
 		vector() = default;
 
-		constexpr vector(float a, float b, float c, float r = 0.0) noexcept;
+		constexpr vector(float x, float y, float z, float rotation = 0.0) noexcept;
+		
+		constexpr float  x() const noexcept;
+				  float& x()	   noexcept;
 
-		constexpr float* begin();
-		constexpr float* end();
+		constexpr float  y() const noexcept;
+				  float& y()	   noexcept;
 
-		constexpr const float* begin() const;
-		constexpr const float* end()   const;
+		constexpr float  z() const noexcept;
+				  float& z()	   noexcept; 
 
-		float x;
-		float y;
-		float z;
-		float bytes;
-		float rot;
+		constexpr float  rotation() const noexcept;
+				  float& rotation()		  noexcept;
 	};
 
 	constexpr vector operator+(const vector& lhs, const vector& rhs) noexcept
-	{ return {lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z}; }
+	{ return {lhs.x() + rhs.x(), lhs.y() + rhs.y(), lhs.z() + rhs.z() }; }
 
 	constexpr vector operator-(const vector& lhs, const vector& rhs) noexcept
-	{ return {lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z}; }
-
-	float distance(const vector& v1, const vector& v2) noexcept;
+	{ return {lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z() }; }
 
 	std::ostream& operator<<(std::ostream& stream, const vector& rhs);
 } // namespace geometry
 
-#include <geometry/impl/vector.hxx>
+#include "impl/vector.hxx"

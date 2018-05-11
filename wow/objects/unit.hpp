@@ -64,7 +64,7 @@ namespace wow::objects
 	private: // implementation functions
 		friend class object;
 
-	private: // data
+	private: // descriptors
 		mutable memory::address descriptors_base_;
 	};
 
