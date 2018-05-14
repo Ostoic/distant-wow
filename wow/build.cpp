@@ -11,13 +11,13 @@ namespace wow
 	{
 		try
 		{
-			const auto version_name = distant::memory::read<std::string>(process, wow::offsets::build_info::version_name, 17);
+			const auto version_name  = distant::memory::read<std::string>(process, wow::offsets::build_info::version_name, 17);
 			const auto major_version = distant::memory::read<std::string>(process, wow::offsets::build_info::major_version, 5);
 			const auto minor_version = distant::memory::read<std::string>(process, wow::offsets::build_info::minor_version, 5);
 
 			std::stringstream result;
 			result << version_name << " " << major_version << " (" << minor_version << ")";
-			return result.str() == supported_build;
+			return supported_build == result.str();
 		}
 		catch (distant::windows_error&) {}
 

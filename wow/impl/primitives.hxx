@@ -46,13 +46,26 @@ namespace wow
 		return !operator==(lhs, rhs);
 	}
 
-	inline std::ostream& operator<<(std::ostream& stream, const guid& guid)
+	template <typename CharT, typename TraitsT>
+	std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& stream, const guid& guid)
 	{
 		const auto f = stream.flags();
 
 		stream << std::hex;
 		stream << std::setfill('0') << std::setw(sizeof(guid));
 		stream << guid.high << guid.low;
+		stream.flags(f);
+		return stream;
+	}
+
+	template <typename CharT, typename TraitsT>
+	std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& stream, const flags& flags)
+	{
+		const auto f = stream.flags();
+
+		stream << std::hex;
+		stream << std::setfill('0') << std::setw(sizeof(guid));
+		stream << static_cast<dword>(flags);
 		stream.flags(f);
 		return stream;
 	}

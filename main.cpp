@@ -10,8 +10,8 @@
 #include <wow/state.hpp>
 #include <wow/build.hpp>
 #include <wow/offsets.hpp>
-#include <wow/objects/all.hpp>
-#include <wow/objects/display_ids.hpp>
+#include <wow/entities/all.hpp>
+#include <wow/entities/display_ids.hpp>
 
 #include <boost/sml.hpp>
 #include <boost/iterator/filter_iterator.hpp>
@@ -109,20 +109,11 @@ int main()
 
 		try
 		{
-			auto version = memory::read_offset(wow::offsets::build_info::version_name);
-
-			const auto& local_player = wow::local_player();
-			std::cout << wow::make_object_dump(local_player);
-
 			wow::object_manager<wow::game_object>{}
-				.for_each([](wow::game_object& obj)
+				.for_each([](const wow::game_object& obj)
 			{
-				std::cout << wow::make_object_dump(obj);
-				//obj.change_owner(local_player);
-				//obj.set_flags(0);
-
-				//std::cout << "Now owned by " << obj.owner()->get().name() << "\n\n";
-			}, fishing_bobber_predicate{});
+				std::cout << wow::make_object_dump(obj) << "\n\n";
+			});
 			
 			/*
 			const auto closest_lamp_it = std::min_element(begin, end, [&local_player](const auto& unit1, const auto& unit2)
@@ -139,7 +130,7 @@ int main()
 				std::cout << "Owner: " << ((closest_lamp.owner()) ? closest_lamp.owner()->get().name() : "None") << '\n';
 			}*/
 
-			//wow::ui::interact(objects::local_player());
+			//wow::ui::interact(entities::local_player());
 			
 			std::cout << "Cache size: " << wow::object_manager<wow::unit>().size() << '\n';
 		}

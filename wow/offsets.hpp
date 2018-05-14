@@ -4,7 +4,7 @@
 #include <geometry/vector.hpp>
 
 #include "primitives.hpp"
-#include "objects/types.hpp"
+#include "entities/types.hpp"
 
 #include <string>
 
@@ -16,7 +16,7 @@ namespace wow::offsets
 	template <typename...>
 	struct function;
 
-	constexpr auto client_connection = 0x00C79CE0;
+	constexpr auto client_connection = memory::offset<memory::address>(0x00C79CE0);
 
 	namespace build_info
 	{
@@ -31,6 +31,14 @@ namespace wow::offsets
 		constexpr auto login_screen_status = memory::offset<wow::dword>(0xD41660);
 		constexpr auto account_name		   = memory::offset<std::string>(0x00B6AA40);
 		constexpr auto realm_name		   = memory::offset<std::string>(0x00C79B9E);
+	}
+
+	namespace local
+	{
+		constexpr auto followed_unit  = memory::offset<wow::guid>(0x00CA11F8);
+		constexpr auto current_target = memory::offset<wow::guid>(0x00BD07B0);
+		constexpr auto last_tareget	  = memory::offset<wow::guid>(0x00BD07B8);
+		constexpr auto follow_guid = memory::offset<wow::guid>(0x00CA11F8);
 	}
 
 	namespace ui
@@ -79,7 +87,7 @@ namespace wow::offsets
 		constexpr auto map_id		= memory::offset<wow::uint>(0xCC);
 		constexpr auto tls_index	= memory::offset<memory::address>(0x2C);
 		constexpr auto player_guid	= memory::offset<wow::guid>(0xC0);
-		constexpr auto first_entry	= memory::offset<objects::object*>(0xAC);
+		constexpr auto first_entry	= memory::offset<entities::object*>(0xAC);
 	}
 
 	namespace object
@@ -87,9 +95,9 @@ namespace wow::offsets
 		constexpr auto vtable = memory::offset<std::vector<function<void>>>(0);
 		constexpr auto scale  = memory::offset<float>(0x10); // ?? check
 
-		constexpr auto type   = memory::offset<objects::object_type>(0x14);
+		constexpr auto type   = memory::offset<entities::object_type>(0x14);
 		constexpr auto guid   = memory::offset<wow::guid>(0x30);
-		constexpr auto next   = memory::offset<objects::object*>(0x3C);
+		constexpr auto next   = memory::offset<entities::object*>(0x3C);
 
 		// what type?
 		constexpr auto model = memory::offset<wow::uint>(0xB4);
@@ -112,7 +120,7 @@ namespace wow::offsets
 	namespace item_descriptors
 	{
 		constexpr auto owner_guid		 = memory::offset<wow::guid>(0);
-		constexpr auto container		 = memory::offset<wow::guid>(0x8); // container??
+		constexpr auto container_guid	 = memory::offset<wow::guid>(0x8);
 		constexpr auto creator_guid		 = memory::offset<wow::guid>(0x10);
 		constexpr auto gift_creator_guid = memory::offset<wow::guid>(0x18);
 		constexpr auto stack_count		 = memory::offset<wow::uint>();
@@ -137,7 +145,7 @@ namespace wow::offsets
 
 	namespace unit_descriptors
 	{
-		//constexpr auto ownership_chunk	 = memory::offset<decltype(objects::detail::unit_descriptors::ownership_chunk)>(0x18);
+		//constexpr auto ownership_chunk	 = memory::offset<decltype(entities::detail::unit_descriptors::ownership_chunk)>(0x18);
 		constexpr auto charm			 = memory::offset<wow::guid>(0x18);
 		constexpr auto summon			 = memory::offset<wow::guid>(0x20);
 		constexpr auto critter			 = memory::offset<wow::guid>(0x28);
@@ -148,7 +156,7 @@ namespace wow::offsets
 		constexpr auto channelled_object = memory::offset<wow::guid>(0x50);
 		constexpr auto channelled_spell  = memory::offset<wow::guid>(0x58);
 
-		//constexpr auto power_chunk = memory::offset<decltype(objects::detail::unit_descriptors::power_chunk)>(0x60);
+		//constexpr auto power_chunk = memory::offset<decltype(entities::detail::unit_descriptors::power_chunk)>(0x60);
 		constexpr auto health = memory::offset<wow::uint>(0x60);
 		constexpr auto power1 = memory::offset<wow::uint>(0x64); // weird
 		constexpr auto power2 = memory::offset<wow::uint>(0x68); // warrior rage * 10
@@ -173,7 +181,7 @@ namespace wow::offsets
 		//constexpr auto channelled_object = memory::offset<wow::guid>(0x50);
 		//constexpr auto channelled_object = memory::offset<wow::guid>(0x50);
 
-		//constexpr auto speed_chunk				= memory::offset<decltype(objects::detail::unit_descriptors::speed_chunk)>(0x814);
+		//constexpr auto speed_chunk				= memory::offset<decltype(entities::detail::unit_descriptors::speed_chunk)>(0x814);
 		constexpr auto movement_speed_current	= memory::offset<float>(0x814);
 		constexpr auto movement_speed_walking	= memory::offset<float>(0x818);
 		constexpr auto movement_speed_active	= memory::offset<float>(0x81C);
@@ -244,6 +252,13 @@ namespace wow::offsets
 		constexpr auto number_of_online_members = memory::offset<wow::uint>(0xC22AB4);
 
 		constexpr auto update_roster = memory::offset<function<void()>>(0x005CA9B0);
+	}
+
+	namespace time
+	{
+		// Todo: consider returning std::chrono::time_point
+		constexpr auto timestamp		   = memory::offset<wow::uint>(0x00B1D618);
+		constexpr auto last_hardware_input = memory::offset<wow::uint>(0x00B499A4);
 	}
 
 	namespace c_vars

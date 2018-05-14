@@ -25,7 +25,6 @@ namespace distant::memory::customize
 			geometry::vector vector = {};
 			SIZE_T bytes_read = 0;
 
-			/// Todo: Read until null terminator or threshold
 			if (!::ReadProcessMemory(
 				process.handle().native_handle(),
 				reinterpret_cast<boost::winapi::LPCVOID_>(static_cast<AddressT>(address)),

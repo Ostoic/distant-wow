@@ -2,7 +2,7 @@
 
 namespace wow::ui
 {
-	void interact(objects::object& object)
+	void interact(entities::object& object)
 	{
 		
 	}

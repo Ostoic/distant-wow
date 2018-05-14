@@ -9,7 +9,8 @@
 namespace wow
 {
 	using dword = boost::winapi::DWORD_;
-	using flags = dword;
+	enum class flags : dword {};
+	//using flags = dword;
 	using uint = unsigned int;
 	using byte = char;
 
@@ -31,7 +32,11 @@ namespace wow
 	constexpr bool operator==(const guid& lhs, const guid& rhs) noexcept;
 	constexpr bool operator!=(const guid& lhs, const guid& rhs) noexcept;
 
-	std::ostream& operator<<(std::ostream& stream, const guid& guid);
+	template <typename CharT, typename TraitsT>
+	std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& stream, const guid& guid);
+
+	template <typename CharT, typename TraitsT>
+	std::basic_ostream<CharT, TraitsT>& operator<<(std::basic_ostream<CharT, TraitsT>& stream, const flags& flags);
 }
 
 #include "impl/primitives.hxx"

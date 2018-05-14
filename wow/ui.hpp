@@ -1,10 +1,10 @@
 #pragma once
 
-#include "objects/object.hpp"
+#include "entities/object.hpp"
 
 namespace wow::ui
 {
-	void target(objects::object& object);
+	void target(entities::object& object);
 
-	void interact(objects::object& object);
+	void interact(entities::object& object);
 } 
