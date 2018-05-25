@@ -121,7 +121,7 @@ namespace wow::entities
 
 		// Compare current base with the last one.
 		// Clear the cache if they differ.
-		if (this->base_ != last_base)
+		if (base_ != last_base)
 		{
 			if (!detail::valid_base_address(this->base_))
 				throw error::memory_disparity("[object_manager::{ctor}] Invalid object manager base");
@@ -132,7 +132,7 @@ namespace wow::entities
 		//const auto current = memory::read<memory::address>(this->base_ + wow::offsets::object_manager::first_entry); 
 
 		// Set the previous object manager's base.
-		last_base = this->base_;
+		last_base = base_;
 	}
 
 } // namespace wow

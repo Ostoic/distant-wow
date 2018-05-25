@@ -8,6 +8,11 @@
 
 #include <string>
 
+namespace wow::entities
+{
+	enum class power_type;
+}
+
 /// @brief WoW version 3.3.5a 12340 addresses and offsets.
 namespace wow::offsets
 {
@@ -37,7 +42,7 @@ namespace wow::offsets
 	{
 		constexpr auto followed_unit  = memory::offset<wow::guid>(0x00CA11F8);
 		constexpr auto current_target = memory::offset<wow::guid>(0x00BD07B0);
-		constexpr auto last_tareget	  = memory::offset<wow::guid>(0x00BD07B8);
+		constexpr auto last_target	  = memory::offset<wow::guid>(0x00BD07B8);
 		constexpr auto follow_guid = memory::offset<wow::guid>(0x00CA11F8);
 	}
 
@@ -48,7 +53,8 @@ namespace wow::offsets
 
 	namespace game_state
 	{
-		constexpr auto ingame = memory::address(0xBEBA40);
+		constexpr auto ingame	 = memory::offset<bool>(0xBEBA40);
+		constexpr auto logged_in = memory::offset<bool>(0xBD0793);
 	}
 
 	namespace directX
@@ -83,7 +89,7 @@ namespace wow::offsets
 	
 	namespace object_manager
 	{
-		constexpr auto current_mgr	= memory::offset<pointer>(0x2ED0);
+		constexpr auto current_mgr	= memory::offset<memory::address>(0x2ED0);
 		constexpr auto map_id		= memory::offset<wow::uint>(0xCC);
 		constexpr auto tls_index	= memory::offset<memory::address>(0x2C);
 		constexpr auto player_guid	= memory::offset<wow::guid>(0xC0);
@@ -101,6 +107,11 @@ namespace wow::offsets
 
 		// what type?
 		constexpr auto model = memory::offset<wow::uint>(0xB4);
+
+		constexpr auto power_type_ptr = memory::offset<memory::address>(0xD0);
+		constexpr auto power_type	  = memory::offset<entities::power_type>(0x47);
+
+		constexpr auto power = memory::offset<wow::uint>(0xFB4);
 
 		constexpr auto object_descriptors = memory::offset<memory::address>(0x08);
 		constexpr auto player_descriptors = memory::offset<memory::address>(0x1198);
@@ -166,13 +177,13 @@ namespace wow::offsets
 		constexpr auto power6 = memory::offset<wow::uint>(0x78); 
 		constexpr auto power7 = memory::offset<wow::uint>(0x7C); // weird
 		constexpr auto max_health = memory::offset<wow::uint>(0x80);
-		constexpr auto max_power1 = memory::offset<wow::uint>(0x84); // weird
+		constexpr auto max_power1 = memory::offset<wow::uint>(0x84); // mana
 		constexpr auto max_power2 = memory::offset<wow::uint>(0x88); // warrior rage * 10
 		constexpr auto max_power3 = memory::offset<wow::uint>(0x8C);
 		constexpr auto max_power4 = memory::offset<wow::uint>(0x90); // rogue energy
 		constexpr auto max_power5 = memory::offset<wow::uint>(0x94);
 		constexpr auto max_power6 = memory::offset<wow::uint>(0x98);
-		constexpr auto max_power7 = memory::offset<wow::uint>(0x9C); // weird
+		constexpr auto max_power7 = memory::offset<wow::uint>(0x9C); // rune*10
 
 		constexpr auto flags  = memory::offset<wow::flags>(0xEC);
 		constexpr auto flags2 = memory::offset<wow::flags>(0xF0);
@@ -257,13 +268,28 @@ namespace wow::offsets
 	namespace time
 	{
 		// Todo: consider returning std::chrono::time_point
-		constexpr auto timestamp		   = memory::offset<wow::uint>(0x00B1D618);
+		constexpr auto time_manager		   = memory::address(0xB1D5E4);
+		constexpr auto timestamp		   = memory::offset<wow::uint>(time_manager + 0x00B1D618);
 		constexpr auto last_hardware_input = memory::offset<wow::uint>(0x00B499A4);
 	}
 
+	namespace console
+	{
+		constexpr auto key				  = memory::offset<wow::byte>(0x00ADBAC4);
+		constexpr auto is_active		  = memory::offset<bool>(0xCA1978);
+		constexpr auto last_message		  = memory::offset<std::array<char, 400>>(0xCABA58);
+		constexpr auto number_of_messages = memory::offset<wow::uint>(0x00CA197C);
+	}
+	
+	namespace loot_table
+	{
+		constexpr auto initiate_running_loot_hack = memory::address(0x006DAE60);
+		constexpr auto looted_unit = memory::offset<wow::guid>(0x00BFA8D8);
+		constexpr auto item_guids = memory::offset<std::array<wow::guid, 18>>(0x00BFA694);
+	}
+	
 	namespace c_vars
 	{
-		constexpr auto console_key = memory::offset<wow::byte>(0x00ADBAC4);
 	}
 
 } // namespace wow::offsets

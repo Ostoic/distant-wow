@@ -43,6 +43,9 @@ namespace memory
 	template <typename T>
 	T read(const address address, const std::size_t size)
 	{
+		if (!wow::process().is_active())
+			throw error::game_error("[memory::read] Process is not running");
+
 		return distant::memory::read<T>(wow::process(), address, size);
 	}
 

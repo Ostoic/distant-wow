@@ -2,12 +2,23 @@
 #include "process.hpp"
 #include "offsets.hpp"
 
-#include <distant/memory/virtual_memory.hpp>
+#include "../memory/operations.hpp"
 
 namespace wow
 {
 	bool ingame()
 	{
-		return distant::memory::read<bool>(wow::process(), wow::offsets::game_state::ingame);
+		if (!wow::process() || !wow::process().is_active()) 
+			return false;
+
+		return memory::read_offset(wow::offsets::game_state::ingame);
+	}
+
+	bool logged_in()
+	{
+		if (!wow::process() || !wow::process().is_active())
+			return false;
+
+		return memory::read_offset(wow::offsets::game_state::logged_in);
 	}
 }

@@ -15,14 +15,14 @@
 namespace wow::entities
 {
 //const interface:
-	const std::string& object::name() const noexcept
-	{
-		return this->name_;
-	}
-
 	memory::address object::base() const noexcept
 	{
 		return this->base_;
+	}
+
+	std::string object::name() const
+	{
+		return memory::read<std::string>(this->get_name_ptr(), 64);
 	}
 
 	geometry::vector object::position() const noexcept
@@ -48,7 +48,12 @@ namespace wow::entities
 //mutator interface:
 	void object::teleport(const geometry::vector& location)
 	{
-		memory::write<geometry::vector>(this->base_ + wow::offsets::object::x_coord, location);
+		memory::write(this->base_ + wow::offsets::object::x_coord, location);
+	}
+
+	void object::change_name(const std::string& name)
+	{
+		memory::write(this->get_name_ptr(), name);
 	}
 
 //{ctor}:
@@ -65,24 +70,6 @@ namespace wow::entities
 		if (!this->valid())
 			throw error::memory_disparity(message);
 	}
-
-	object::object(const memory::address base, const unit& obj)
-		: base_(base)
-		, guid_(detail::load_object_guid(base))
-		, name_(detail::load_name<unit>(base)) 
-	{}
-
-	object::object(const memory::address base, const player& obj)
-		: base_(base)
-		, guid_(detail::load_object_guid(base))
-		, name_(detail::load_name<player>(detail::load_object_guid(base)))
-	{}
-
-	object::object(const memory::address base, const game_object& obj)
-		: base_(base)
-		, guid_(detail::load_object_guid(base))
-		, name_(detail::load_name<game_object>(base)) 
-	{}
 
 	geometry::vector object::get_position() const
 	{

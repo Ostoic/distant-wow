@@ -12,17 +12,15 @@ namespace wow::entities
 		enum class classes;
 
 	public: // interface
-		std::size_t display_id() const override final;
-
 		bool is_player() const override;
-
-		void change_name(const std::string& name) override final;
 
 	public: // {ctor}
 		player() = default;
 		explicit player(memory::address base);
 
 	protected:
+		memory::address get_name_ptr() const override;
+
 		void update_data() const override final;
 
 	private: // implementation functions

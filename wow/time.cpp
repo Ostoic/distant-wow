@@ -7,11 +7,12 @@ namespace wow::time
 {
 	std::int64_t os_get_async_time_ms()
 	{
-		
+		return 1;
 	}
 
 	time_point timestamp()
 	{
+		//QueryPerformanceCounter(nullptr);
 		const auto count = memory::read_offset(offsets::time::timestamp);
 		return time_point(duration(count));
 	}

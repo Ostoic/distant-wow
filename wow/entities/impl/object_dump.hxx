@@ -33,7 +33,8 @@ namespace wow::entities
 			stream
 				<< "Game object:\n"
 				<< "Name: " << object.name() << '\n'
-				<< "Base: " << object.base() << '\n'
+				<< "Object Base: " << object.base() << '\n'
+				<< "Descriptors Base: " << object.descriptors_base() << '\n'
 				<< "Display id: " << object.display_id() << '\n';
 
 			stream << "Created by: ";
@@ -42,9 +43,13 @@ namespace wow::entities
 			else
 				stream << "nobody\n";
 
-			stream 
+			stream
 				<< "Flags: " << object.flags() << '\n'
-				<< "Other flags: " << object.other_flags() << '\n';
+				<< "Other flags: " << object.other_flags() << '\n'
+				<< "Dynamic flags: " << object.dynamic_flags() << '\n'
+				<< "Level: " << object.level() << '\n'
+				<< "Faction: " << object.faction() << '\n'
+				<< "Parent rotation: " << object.parent_rotation() << '\n';
 		}
 
 		template <typename CharT, typename TraitsT>

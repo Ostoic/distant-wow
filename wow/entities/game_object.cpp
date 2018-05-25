@@ -10,6 +10,11 @@
 namespace wow::entities
 {
 //public:
+	memory::address game_object::descriptors_base() const
+	{
+		return descriptors_base_;
+	}
+
 	uint game_object::display_id() const
 	{
 		this->update_data();
@@ -42,6 +47,30 @@ namespace wow::entities
 		return memory::read_offset(descriptors_base_, offsets::game_object_descriptors::other_flags);
 	}
 
+	wow::flags game_object::dynamic_flags() const
+	{
+		this->update_data();
+		return memory::read_offset(descriptors_base_, offsets::game_object_descriptors::dynamic_flags);
+	}
+
+	wow::uint game_object::level() const
+	{
+		this->update_data();
+		return memory::read_offset(descriptors_base_, offsets::game_object_descriptors::level);
+	}
+
+	wow::uint game_object::faction() const
+	{
+		this->update_data();
+		return memory::read_offset(descriptors_base_, offsets::game_object_descriptors::faction);
+	}
+
+	float game_object::parent_rotation() const
+	{
+		this->update_data();
+		return memory::read_offset(descriptors_base_, offsets::game_object_descriptors::parent_rotation);
+	}
+
 	void game_object::set_flags(const wow::flags flags)
 	{
 		this->update_data();
@@ -54,17 +83,17 @@ namespace wow::entities
 		memory::write(descriptors_base_ + offsets::game_object_descriptors::created_by, new_owner.guid());
 	}
 
-	void game_object::change_name(const std::string& name)
-	{
-		memory::write(detail::get_name_ptr<game_object>(base_), name_);
-		this->name_ = name;
-	}
-
 //{ctor}:
 	game_object::game_object(const memory::address base)
-		: object(base, *this) {}
+		: object(base) {}
 
 //private:
+	memory::address game_object::get_name_ptr() const
+	{
+		const auto ptr = memory::read_offset(base_, wow::offsets::name_cache::go_name_ptr_offset1);
+		return memory::read_offset(ptr, wow::offsets::name_cache::go_name_ptr_offset2);
+	}
+
 	void game_object::update_data() const
 	{
 		if (descriptors_base_ == 0)

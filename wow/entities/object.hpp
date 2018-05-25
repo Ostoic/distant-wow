@@ -19,7 +19,7 @@ namespace wow::entities
 	public: // const interface
 		virtual std::size_t display_id() const = 0;
 
-		const std::string& name() const noexcept;
+		std::string name() const;
 
 		memory::address base() const noexcept;
 
@@ -34,7 +34,7 @@ namespace wow::entities
 	public: // mutator interface
 		void teleport(const geometry::vector& location);
 
-		virtual void change_name(const std::string& name) = 0;
+		void change_name(const std::string& name);
 
 	public: // {ctor}
 		object() = default;
@@ -49,11 +49,9 @@ namespace wow::entities
 		virtual ~object() = default;
 
 	protected:
-		explicit object(memory::address base, const unit&);
-		explicit object(memory::address base, const player&);
-		explicit object(memory::address base, const game_object&);
-
 		virtual geometry::vector get_position() const;
+
+		virtual memory::address get_name_ptr() const = 0;
 
 		void throw_if_invalid(const std::string& message) const;
 
@@ -70,7 +68,6 @@ namespace wow::entities
 	protected: // data
 		memory::address base_;
 		wow::guid		guid_;
-		std::string		name_;
 	};
 
 	bool is_valid(const object& obj);

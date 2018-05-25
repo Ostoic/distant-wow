@@ -8,6 +8,11 @@
 namespace wow::entities
 {
 //public:
+	memory::address unit::descriptors_base() const
+	{
+		return descriptors_base_;
+	}
+
 	std::size_t unit::display_id() const
 	{
 		this->update_data();
@@ -27,6 +32,20 @@ namespace wow::entities
 
 		if (it != manager.end())
 			return *it;
+		return {};
+	}
+
+	optional_ref<unit> unit::target() const
+	{
+		this->update_data();
+		const auto target_guid = memory::read_offset(descriptors_base_, offsets::unit_descriptors::target);
+
+		object_manager<unit> manager;
+		const auto it = manager.find(target_guid);
+
+		if (it != manager.end())
+			return *it;
+
 		return {};
 	}
 
@@ -58,13 +77,29 @@ namespace wow::entities
 	wow::uint unit::power() const
 	{
 		this->update_data();
-		return 0;
+
+		const auto power_type = this->power_type();
+		const auto power = memory::read_offset(base_ + static_cast<uint>(power_type) * 4, offsets::object::power);
+		return (power_type == power_type::rune || power_type == power_type::rage) 
+			? power / 10 
+			: power;
 	}
 
 	wow::uint unit::max_power() const
 	{
 		this->update_data();
-		return 0;
+
+		const auto power_type = this->power_type();
+		return memory::read_offset(descriptors_base_ + static_cast<uint>(power_type) * 4, offsets::unit_descriptors::max_power1);
+	}
+
+	power_type unit::power_type() const
+	{
+		this->update_data();
+		return memory::read_offset(
+			memory::read_offset(base_, offsets::object::power_type_ptr), 
+			offsets::object::power_type
+		);
 	}
 
 	float unit::current_speed() const
@@ -123,15 +158,7 @@ namespace wow::entities
 	}
 
 //public mutators:
-	void unit::change_name(const std::string& new_name)
-	{
-		memory::write(
-			detail::get_name_ptr<unit>(base_),
-			new_name
-		);
-	}
-
-	void unit::change_owner(const object& new_owner)
+	void unit::set_owner(const object& new_owner)
 	{
 		this->update_data();
 		memory::write(
@@ -140,13 +167,25 @@ namespace wow::entities
 		);
 	}
 
+	void unit::set_target(const object& new_target)
+	{
+		this->update_data();
+		memory::write(
+			descriptors_base_ + offsets::unit_descriptors::target,
+			new_target.guid()
+		);
+	}
+
 //{ctor}:
 	unit::unit(const memory::address base)
-		: object(base, *this), descriptors_base_(0) {}
+		: object(base), descriptors_base_(0) {}
 
 //protected {ctor}:
-	unit::unit(const memory::address base, const player& p)
-		: object(base, p), descriptors_base_(0) {}
+	memory::address unit::get_name_ptr() const
+	{
+		const auto name_pointer = memory::read<memory::address>(base_ + wow::offsets::name_cache::unit_name_ptr_offset1);
+		return memory::read<memory::address>(name_pointer + wow::offsets::name_cache::unit_name_ptr_offset2);
+	}
 
 	void unit::update_data() const
 	{
