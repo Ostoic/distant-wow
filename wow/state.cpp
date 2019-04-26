@@ -8,7 +8,7 @@ namespace wow
 {
 	bool ingame()
 	{
-		if (!wow::process() || !wow::process().is_active()) 
+		if (!wow::process() || !wow::process().is_active())
 			return false;
 
 		return memory::read_offset(wow::offsets::game_state::ingame);

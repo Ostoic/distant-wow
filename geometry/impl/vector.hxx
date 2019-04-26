@@ -1,5 +1,5 @@
 #pragma once
-#include <geometry/vector.hpp>
+#include <geometry/point.hpp>
 
 #include <numeric>
 

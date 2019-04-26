@@ -44,7 +44,7 @@ namespace wow::group
 			guid = memory::read<wow::guid>(wow::offsets::party::member5_guid);
 			break;
 
-		default: 
+		default:
 			// Todo: raid members
 			return {};
 		}

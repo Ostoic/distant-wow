@@ -7,21 +7,13 @@ namespace memory
 	using address = distant::address;
 
 	template <typename T>
-	class offset 
+	class offset : public distant::address
 	{
 	public:
 		constexpr offset() noexcept = default;
 
 		constexpr offset(const address address) noexcept
-			: address_(address) {}
-
-		constexpr operator address() const noexcept
-		{
-			return address_;
-		}
-
-	private:
-		address address_;
+			: distant::address(address) {}
 	};
 
 	template <typename T>

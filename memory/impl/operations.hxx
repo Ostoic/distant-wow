@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include <distant/error/windows_error.hpp>
+#include <distant/error/winapi_error.hpp>
 #include <error/game_error.hpp>
 
 #include <wow/primitives.hpp>
@@ -13,14 +13,13 @@
 
 #include <distant/memory/virtual_memory.hpp>
 
-namespace distant::memory::customize
+namespace distant::memory
 {
-	/// @brief memory::read geometry::vector customization point.
 	template <>
-	struct read<geometry::vector>
+	struct operations_traits<geometry::vector>
 	{
 		template <typename AddressT>
-		static geometry::vector invoke(const process<vm_read>& process, const address<AddressT> address, const std::size_t size)
+		static geometry::vector read(const process<vm_read>& process, const address<AddressT> address, const std::size_t size)
 		{
 			geometry::vector vector = {};
 			SIZE_T bytes_read = 0;
@@ -32,12 +31,30 @@ namespace distant::memory::customize
 				size,
 				&bytes_read
 			))
-				throw windows_error("[memory::read<geometry::vecto>] ReadProcessMemory failed, " + std::to_string(bytes_read) + " bytes read");
+				throw winapi_error("[memory::read<geometry::vector>] ReadProcessMemory failed, " + std::to_string(bytes_read) + " bytes read");
+
+			return vector;
+		}
+
+		template <typename AddressT>
+		static geometry::vector write(const process<vm_w_op>& process, const address<AddressT> address, const geometry::vector& vector)
+		{
+			SIZE_T bytes_written = 0;
+
+			if (!::WriteProcessMemory(
+				process.handle().native_handle(),
+				reinterpret_cast<boost::winapi::LPVOID_>(static_cast<AddressT>(address)),
+				vector.data(),
+				vector.size(),
+				&bytes_written
+			))
+				throw winapi_error("[memory::write<geometry::vector>] WriteProcessMemory failed, " + std::to_string(bytes_written) + " bytes written");
 
 			return vector;
 		}
 	};
 }
+
 namespace memory
 {
 	template <typename T>

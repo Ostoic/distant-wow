@@ -11,7 +11,7 @@ namespace geometry
 		vector() = default;
 
 		constexpr vector(float x, float y, float z, float rotation = 0.0) noexcept;
-		
+
 		constexpr float  x() const noexcept;
 				  float& x()	   noexcept;
 
@@ -19,7 +19,7 @@ namespace geometry
 				  float& y()	   noexcept;
 
 		constexpr float  z() const noexcept;
-				  float& z()	   noexcept; 
+				  float& z()	   noexcept;
 
 		constexpr float  rotation() const noexcept;
 				  float& rotation()		  noexcept;

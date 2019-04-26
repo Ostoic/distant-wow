@@ -48,7 +48,7 @@ namespace wow::offsets
 
 	namespace ui
 	{
-		
+
 	}
 
 	namespace game_state
@@ -86,7 +86,7 @@ namespace wow::offsets
 		constexpr auto base_ptr2 = memory::offset<memory::address*>(0x24);
 		constexpr auto name		 = memory::offset<std::string>(0xC79D18);
 	}
-	
+
 	namespace object_manager
 	{
 		constexpr auto current_mgr	= memory::offset<memory::address>(0x2ED0);
@@ -173,8 +173,8 @@ namespace wow::offsets
 		constexpr auto power2 = memory::offset<wow::uint>(0x68); // warrior rage * 10
 		constexpr auto power3 = memory::offset<wow::uint>(0x6C);
 		constexpr auto power4 = memory::offset<wow::uint>(0x70); // rogue energy
-		constexpr auto power5 = memory::offset<wow::uint>(0x74); 
-		constexpr auto power6 = memory::offset<wow::uint>(0x78); 
+		constexpr auto power5 = memory::offset<wow::uint>(0x74);
+		constexpr auto power6 = memory::offset<wow::uint>(0x78);
 		constexpr auto power7 = memory::offset<wow::uint>(0x7C); // weird
 		constexpr auto max_health = memory::offset<wow::uint>(0x80);
 		constexpr auto max_power1 = memory::offset<wow::uint>(0x84); // mana
@@ -233,7 +233,7 @@ namespace wow::offsets
 		constexpr auto cast_time  = memory::offset<wow::uint>(0x24);
 	}
 
-	namespace name_cache 
+	namespace name_cache
 	{
 		constexpr auto unit_name_ptr_offset1 = memory::offset<std::string**>(0x964);
 		constexpr auto unit_name_ptr_offset2 = memory::offset<std::string*>(0x5C);
@@ -243,14 +243,14 @@ namespace wow::offsets
 		constexpr auto player_name_base   = memory::offset<pointer>(0x1C);
 		constexpr auto player_name_string = memory::offset<std::string>(0x20);
 
-		constexpr auto go_name_ptr_offset1 = 
+		constexpr auto go_name_ptr_offset1 =
 			memory::offset<
 				memory::offset<
 					memory::offset<std::string>
 				>
 			> (0x1A4);
 
-		constexpr auto go_name_ptr_offset2 = 
+		constexpr auto go_name_ptr_offset2 =
 			memory::offset<
 				memory::offset<std::string>
 			> (0x90);
@@ -280,14 +280,14 @@ namespace wow::offsets
 		constexpr auto last_message		  = memory::offset<std::array<char, 400>>(0xCABA58);
 		constexpr auto number_of_messages = memory::offset<wow::uint>(0x00CA197C);
 	}
-	
+
 	namespace loot_table
 	{
 		constexpr auto initiate_running_loot_hack = memory::address(0x006DAE60);
 		constexpr auto looted_unit = memory::offset<wow::guid>(0x00BFA8D8);
 		constexpr auto item_guids = memory::offset<std::array<wow::guid, 18>>(0x00BFA694);
 	}
-	
+
 	namespace c_vars
 	{
 	}

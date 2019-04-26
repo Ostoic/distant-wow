@@ -4,6 +4,6 @@ namespace wow::ui
 {
 	void interact(entities::object& object)
 	{
-		
+
 	}
 }

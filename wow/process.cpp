@@ -19,7 +19,7 @@ namespace wow
 	void attach_process(distant::process<>&& process)
 	{
 		if (!process || !process.is_active())
-			throw distant::windows_error("[wow::attach_process] Invalid process");
+			throw distant::winapi_error("[wow::attach_process] Invalid process");
 
 		if (!is_process_supported(process))
 			throw error::memory_disparity("[wow::attach_process] WoW version not supported");
