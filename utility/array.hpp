@@ -1,6 +1,6 @@
 #pragma once
 
-namespace utility
+namespace distant::wow::utility
 {
 	template <typename... Args>
 	constexpr auto make_array(Args&&... args) noexcept

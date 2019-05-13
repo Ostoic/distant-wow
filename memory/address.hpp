@@ -2,7 +2,7 @@
 
 #include <distant/memory/address.hpp>
 
-namespace memory
+namespace distant::wow::memory
 {
 	using address = distant::address;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace utility
+namespace distant::wow::utility
 {
 	/*template <typename T>
 	constexpr bool enum_domain_check(int check)

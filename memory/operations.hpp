@@ -2,7 +2,7 @@
 
 #include "address.hpp"
 
-namespace memory
+namespace distant::wow::memory
 {
 	template <typename T>
 	T read(address, std::size_t = sizeof(T));

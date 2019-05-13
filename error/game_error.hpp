@@ -3,7 +3,9 @@
 #include <string>
 #include <exception>
 
-namespace error
+#include <distant/error/winapi_error.hpp>
+
+namespace distant::wow::error
 {
 	class game_error : public std::exception
 	{
@@ -22,6 +24,16 @@ namespace error
 			: exception(message.c_str()) {}
 
 		explicit memory_disparity(const char *message)
+			: exception(message) {}
+	};
+
+	class invalid_downcast : public std::exception
+	{
+	public:
+		explicit invalid_downcast(const std::string& message)
+			: exception(message.c_str()) {}
+
+		explicit invalid_downcast(const char *message)
 			: exception(message) {}
 	};
 }

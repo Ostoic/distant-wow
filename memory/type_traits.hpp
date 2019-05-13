@@ -2,7 +2,7 @@
 
 #include "address.hpp"
 
-namespace memory
+namespace wow::memory
 {
 	template <typename T>
 	struct offset_value_type;

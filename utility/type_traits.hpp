@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <tuple>
 
-namespace utility
+namespace distant::wow::utility
 {
 	template <typename Fn>
 	struct function_traits;

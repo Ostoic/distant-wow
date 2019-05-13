@@ -1,6 +1,6 @@
 #pragma once
 
-namespace utility
+namespace distant::wow::utility
 {
 	class attorney
 	{

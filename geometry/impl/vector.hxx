@@ -1,9 +1,9 @@
 #pragma once
-#include <geometry/point.hpp>
+#include "../vector.hpp"
 
 #include <numeric>
 
-namespace geometry
+namespace distant::wow::geometry
 {
 
 //class vector

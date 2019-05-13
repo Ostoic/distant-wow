@@ -4,24 +4,22 @@
 #include <type_traits>
 
 #include <distant/error/winapi_error.hpp>
-#include <error/game_error.hpp>
-
-#include <wow/primitives.hpp>
-#include <wow/process.hpp>
-
-#include <geometry/vector.hpp>
-
 #include <distant/memory/virtual_memory.hpp>
+
+#include "../../error/game_error.hpp"
+#include "../../primitives.hpp"
+#include "../../process.hpp"
+#include "../../geometry/vector.hpp"
 
 namespace distant::memory
 {
 	template <>
-	struct operations_traits<geometry::vector>
+	struct operations_traits<wow::geometry::vector>
 	{
 		template <typename AddressT>
-		static geometry::vector read(const process<vm_read>& process, const address<AddressT> address, const std::size_t size)
+		static wow::geometry::vector read(const process<vm_read>& process, const address<AddressT> address, const std::size_t size)
 		{
-			geometry::vector vector = {};
+			wow::geometry::vector vector = {};
 			SIZE_T bytes_read = 0;
 
 			if (!::ReadProcessMemory(
@@ -31,13 +29,13 @@ namespace distant::memory
 				size,
 				&bytes_read
 			))
-				throw winapi_error("[memory::read<geometry::vector>] ReadProcessMemory failed, " + std::to_string(bytes_read) + " bytes read");
+				throw winapi_error("[wow::memory::read<geometry::vector>] ReadProcessMemory failed, " + std::to_string(bytes_read) + " bytes read");
 
 			return vector;
 		}
 
 		template <typename AddressT>
-		static geometry::vector write(const process<vm_w_op>& process, const address<AddressT> address, const geometry::vector& vector)
+		static wow::geometry::vector write(const process<vm_w_op>& process, const address<AddressT> address, const wow::geometry::vector& vector)
 		{
 			SIZE_T bytes_written = 0;
 
@@ -48,21 +46,18 @@ namespace distant::memory
 				vector.size(),
 				&bytes_written
 			))
-				throw winapi_error("[memory::write<geometry::vector>] WriteProcessMemory failed, " + std::to_string(bytes_written) + " bytes written");
+				throw winapi_error("[wow::memory::write<geometry::vector>] WriteProcessMemory failed, " + std::to_string(bytes_written) + " bytes written");
 
 			return vector;
 		}
 	};
 }
 
-namespace memory
+namespace distant::wow::memory
 {
 	template <typename T>
 	T read(const address address, const std::size_t size)
 	{
-		if (!wow::process().is_active())
-			throw error::game_error("[memory::read] Process is not running");
-
 		return distant::memory::read<T>(wow::process(), address, size);
 	}
 
@@ -81,9 +76,6 @@ namespace memory
 	template <typename T>
 	void write(const address address, const T& data)
 	{
-		if (!wow::process().is_active())
-			throw error::game_error("[memory::write] Process is not running");
-
 		distant::memory::write(wow::process(), address, data);
 	}
 } // namespace memory

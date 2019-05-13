@@ -3,7 +3,7 @@
 #include <iostream>
 #include <array>
 
-namespace geometry
+namespace distant::wow::geometry
 {
 	/// @brief position vector representing a location and rotation ingame.
 	struct vector : std::array<float, 5>

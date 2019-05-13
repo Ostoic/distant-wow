@@ -4,35 +4,45 @@
 #include <numeric>
 #include <algorithm>
 
-namespace geometry
+namespace distant::wow::geometry
 {
-	inline float magnitude_squared(const vector& vector) noexcept
+	template <int Dimension>
+	float magnitude_squared(const vector& vector) noexcept
 	{
-		return std::inner_product(vector.begin(), vector.end(), vector.begin(), float(0));
+		static_assert(Dimension <= 3, "[wow::geometry::magnitude_squared] Dimension cannot be higher than 3");
+
+		float result = 0;
+		for (int i = 0; i < Dimension; i++)
+			result += vector[i] * vector[i];
+
+		return result;
 	}
 
+	template <int Dimension>
 	inline float magnitude(const vector& vector) noexcept
 	{
-		return std::sqrt(magnitude_squared(vector));
+		return std::sqrt(magnitude_squared<Dimension>(vector));
 	}
 
 	inline void normalize(vector& vector) noexcept
 	{
-		const auto magnitude = geometry::magnitude(vector);
+		const auto magnitude = geometry::magnitude<2>(vector);
 		std::transform(vector.begin(), vector.end(), vector.begin(), [magnitude](auto component)
 		{
 			return component / magnitude;
 		});
 	}
 
-	constexpr float distance_squared(const vector& lhs, const vector& rhs)
+	template <int Dimension>
+	float distance_squared(const vector& lhs, const vector& rhs)
 	{
 		const auto diff = rhs - lhs;
-		return magnitude_squared(diff);
+		return magnitude_squared<Dimension>(diff);
 	}
 
-	constexpr float distance(const vector& lhs, const vector& rhs)
+	template <int Dimension>
+	float distance(const vector& lhs, const vector& rhs)
 	{
-		return std::sqrt(distance_squared(lhs, rhs));
+		return std::sqrt(distance_squared<Dimension>(lhs, rhs));
 	}
 }
